@@ -8,8 +8,8 @@ import java.sql.SQLException;
 
 import com.andresbank.models.Cliente;
 
-public class ClienteDAO {
-
+public class ClienteDAO extends DAO{
+	
 	private static ClienteDAO instance = null;
 
 	public static ClienteDAO getInstance() throws Exception {
@@ -19,16 +19,17 @@ public class ClienteDAO {
 		return instance;
 	}
 
-	private ClienteDAO() throws Exception {
-		Class.forName("com.mysql.jdbc.Driver").newInstance();// new com.mysql.jdbc.Driver
+	private ClienteDAO() throws Exception {//la funcion del metodo esta en el padre 
+		
 	}
 
 	public Cliente getUserByDNIAndPass(String dnirec, String passrec) throws SQLException {
 		Cliente resCliente = null;
 
-		String url = "jdbc:mysql://localhost/andresbank";
+	
 
-		Connection conn = DriverManager.getConnection(url, "root", "root");
+		//Connection conn = DriverManager.getConnection(url, "root", "root");
+		Connection conn = datasource.getConnection();
 
 		// luego hago peticiones
 		String sql="SELECT uid, nombre, dni, pin, nomina FROM cliente WHERE dni=? AND pin=?";
@@ -61,9 +62,10 @@ public class ClienteDAO {
 	public Cliente getUserByDNI(String dnisess) throws SQLException {
 		Cliente resCliente = null;
 
-		String url = "jdbc:mysql://localhost/andresbank";
+		
 
-		Connection conn = DriverManager.getConnection(url, "root", "root");
+		//Connection conn = DriverManager.getConnection(url, "root", "root");
+		Connection conn = datasource.getConnection();
 
 		// luego hago peticiones
 		String sql="SELECT uid, nombre, dni, pin, nomina FROM cliente WHERE dni=? LIMIT 1";

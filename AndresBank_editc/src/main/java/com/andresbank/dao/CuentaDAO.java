@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import com.andresbank.models.Cliente;
 import com.andresbank.models.Cuenta;
 
-public class CuentaDAO {
+public class CuentaDAO extends	DAO{
+	
 
 	private static CuentaDAO instance = null;
 
@@ -23,15 +24,16 @@ public class CuentaDAO {
 	}
 
 	private CuentaDAO() throws Exception {
-		Class.forName("com.mysql.jdbc.Driver").newInstance();// new com.mysql.jdbc.Driver
+		
 	}
 
 	public ArrayList<Cuenta> getCuentasByDni(String dni) throws SQLException {
 		ArrayList<Cuenta> rescuentas = null;
 
-		String url = "jdbc:mysql://localhost/andresbank";
+		
 
-		Connection conn = DriverManager.getConnection(url, "root", "root");
+		//Connection conn = DriverManager.getConnection(url, "root", "root");
+		Connection conn = datasource.getConnection();
 
 		// luego hago peticiones
 		String sql = "SELECT c.cid,c.nombre,c.numero,c.saldo FROM cuenta c, cliente_cuenta cc, cliente cl WHERE c.cid=cc.cuenta AND cc.cliente=cl.uid AND cl.dni=?";
@@ -63,7 +65,8 @@ public class CuentaDAO {
 
 		String url = "jdbc:mysql://localhost/andresbank";
 
-		Connection conn = DriverManager.getConnection(url, "root", "root");
+		//Connection conn = DriverManager.getConnection(url, "root", "root");
+		Connection conn = datasource.getConnection();
 
 		conn.setAutoCommit(false);
 
@@ -115,7 +118,8 @@ public class CuentaDAO {
 
 		String url = "jdbc:mysql://localhost/andresbank";
 
-		Connection conn = DriverManager.getConnection(url, "root", "root");
+		//Connection conn = DriverManager.getConnection(url, "root", "root");
+		Connection conn = datasource.getConnection();
 
 		// luego hago peticiones
 		String sql = "SELECT c.cid,c.nombre,c.numero,c.saldo FROM cuenta c WHERE c.cid=? LIMIT 1";
@@ -138,9 +142,10 @@ public class CuentaDAO {
 	public boolean actualizarCuenta(Cuenta cuenta) throws SQLException {
 		boolean todoOk = false;
 
-		String url = "jdbc:mysql://localhost/andresbank";
+		
 
-		Connection conn = DriverManager.getConnection(url, "root", "root");
+		//Connection conn = DriverManager.getConnection(url, "root", "root");
+		Connection conn = datasource.getConnection();
 
 		String sql = "UPDATE cuenta SET nombre=?,numero=?,saldo=? WHERE cid=?";
 		PreparedStatement psmt = conn.prepareStatement(sql);
@@ -161,9 +166,10 @@ public class CuentaDAO {
 	public boolean borrarCuenta(int cidInt) throws SQLException {
 		
 		boolean todoOk = false;
-		String url = "jdbc:mysql://localhost/andresbank";
+		
 //borrar siempre primero la base datos dependiente de la otra
-		Connection conn = DriverManager.getConnection(url, "root", "root");
+		//Connection conn = DriverManager.getConnection(url, "root", "root");
+		Connection conn = datasource.getConnection();
 		
 		conn.setAutoCommit(false);
 		
